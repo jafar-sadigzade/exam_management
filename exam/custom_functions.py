@@ -38,6 +38,8 @@ def get_column_mapping(exam):
         return {
             "first_name": mapping.first_name,
             "last_name": mapping.last_name,
+            "father_name": mapping.father_name,
+            "class_no": mapping.class_no,
             "student_id": mapping.student_id,
             "answers": mapping.answers
         }
@@ -74,12 +76,13 @@ def process_student_data(file, exam):
         try:
             # Create answers_dict in the required format
             subjects_list = []
+            start_point = 0
             for subject in exam.exam.scoring_rules['scoring_rules']:
                 subject_name = subject['subject_name']
                 question_count = subject['question_count']
-                student_answers = row[column_mapping["answers"]].strip()[:question_count]
+                student_answers = row[column_mapping["answers"]][start_point:start_point + question_count]
+                start_point += question_count
                 correct_answers = correct_answers_dict.get(subject_name, "")
-
                 subjects_list.append({
                     "subject_name": subject_name,
                     "student_answers": student_answers,
@@ -89,6 +92,8 @@ def process_student_data(file, exam):
             student_info = {
                 "first_name": replace_letters(row[column_mapping['first_name']].strip()),
                 "last_name": replace_letters(row[column_mapping['last_name']].strip()),
+                "father_name": replace_letters(row[column_mapping['father_name']].strip()),
+                "class_no": row[column_mapping['class_no']],
                 "student_id": student_id,
                 "subjects": subjects_list  # Store answers as a list of dictionaries
             }
@@ -96,16 +101,20 @@ def process_student_data(file, exam):
             student = Student.objects.create(
                 first_name=student_info['first_name'],
                 last_name=student_info['last_name'],
+                father_name=student_info['father_name'],
+                class_no=student_info['class_no'],
                 student_id=student_info['student_id'],
                 exam=exam,
                 answers=student_info['subjects']  # Use new format
             )
 
             student.results = calculate_student_result(student, exam)
+
+            if student.results:
+                student.total_score = student.results['total_score']
             student.processed_at = timezone.now()
             student.save()
 
-            print(f"Student {student_info['student_id']} saved successfully.")
         except Exception as e:
             print(f"Error processing row {row}: {e}")
 
@@ -156,10 +165,8 @@ def calculate_student_result(student, exam):
                     incorrect_count += 1
 
             # Calculate the total score for the subject
-            total_score_for_subject = (
-                    correct_count * subject['points_per_correct']
-                    + incorrect_count * subject['points_per_incorrect']
-            )
+            total_score_for_subject = (correct_count * subject['points_per_correct']) + (
+                    incorrect_count * subject['points_per_incorrect'])
 
             # Ensure the score is not negative
             total_score_for_subject = max(total_score_for_subject, 0)

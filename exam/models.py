@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 
 
 class ExamModel(models.Model):
@@ -15,6 +14,9 @@ class ColumnMapping(models.Model):
     exam = models.OneToOneField(ExamModel, on_delete=models.CASCADE, related_name='column_mapping')
     first_name = models.PositiveIntegerField()
     last_name = models.PositiveIntegerField()
+    father_name = models.PositiveIntegerField(null=True, blank=True)
+    class_no = models.PositiveIntegerField(null=True, blank=True)
+    other_info = models.JSONField(null=True, blank=True)
     student_id = models.PositiveIntegerField()
     answers = models.PositiveIntegerField()
 
@@ -24,7 +26,8 @@ class ColumnMapping(models.Model):
 
 class Exam(models.Model):
     exam = models.ForeignKey(ExamModel, on_delete=models.CASCADE)
-    txt = models.FileField()
+    name = models.CharField(max_length=255, null=True, blank=True)
+    txt = models.FileField(upload_to='exams/txt/')
     correct_answers = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
@@ -35,6 +38,9 @@ class Exam(models.Model):
 class Student(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    father_name = models.CharField(max_length=255)
+    class_no = models.CharField(max_length=2)
+    total_score = models.FloatField(default=0)
     student_id = models.CharField(max_length=255, unique=True)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     answers = models.JSONField()  # Stores the answers given by the student as a JSON field
