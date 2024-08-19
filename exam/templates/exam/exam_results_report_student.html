@@ -273,10 +273,10 @@
 <body>
 
 <div class="container-fluid">
-    {% for student in students %}
+    {% if student %}
         <div style="margin-bottom:35px !important;" class="karne_umumi">
             <div class="vereqe_basliq">
-                <span style="float: left;">Sıra: {{ forloop.counter }} </span>
+                <span style="float: left;">Sıra: {{ rank }} </span>
                 <span style="margin-left: 5%;"></span>
                 <span style="float: right;">Bal: {{ student.results.total_score }}</span>
             </div>
@@ -335,10 +335,10 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
-</div>
-
-
+        </div>
+    {% elif error %}
+        <p>{{ error }}</p>
+    {% endif %}
 </body>
 
 </html>
