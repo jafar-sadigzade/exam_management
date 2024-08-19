@@ -9,13 +9,16 @@ class ColumnMappingInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(ExamModel)
 class ExamModelAdmin(admin.ModelAdmin):
     inlines = [ColumnMappingInline]
     list_display = ('exam_name', 'created_at')
 
 
+@admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ('exam', 'created_at')
+    list_display = ('exam', 'name', 'created_at')
+    list_editable = ('name',)
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
@@ -23,6 +26,7 @@ class ExamAdmin(admin.ModelAdmin):
         process_student_data(obj.txt, obj)
 
 
-admin.site.register(ExamModel, ExamModelAdmin)
-admin.site.register(Exam, ExamAdmin)
-admin.site.register(Student)
+@admin.register(Student)
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ('student_id', 'first_name', 'last_name', 'father_name', 'class_no', 'total_score')
+    list_filter = ('student_id', 'first_name', 'last_name', 'class_no', 'total_score')
