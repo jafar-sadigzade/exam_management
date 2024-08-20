@@ -7,15 +7,18 @@ def exam_request(request):
     exams = Exam.objects.all()
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
+        img = '/static/images/' + student_id + '.png'
 
         try:
             exam = Exam.objects.get(id=2)
             students_ordered = Student.objects.filter(exam=exam).order_by('-total_score')
             student = students_ordered.get(student_id=student_id)
             student_index = list(students_ordered).index(student) + 1
-            return render(request, 'exam/exam_results_report_student.html', {'student': student, 'rank': student_index})
+            context = {'student': student, 'rank': student_index, 'img': img}
+            return render(request, 'exam/exam_results_report_student.html', context)
         except (Student.DoesNotExist, Exam.DoesNotExist):
-            return render(request, 'exam/exam_results_report_student.html', {'error': 'Student not found'})
+            context = {'error': 'İş nömrəsi tapılmadı! '}
+            return render(request, 'exam/exam_results_report_student.html', context)
     return render(request, 'exam/exam_list.html', {'exams': exams})
 
 
