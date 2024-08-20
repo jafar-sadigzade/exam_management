@@ -195,7 +195,7 @@
             <div class="vereqe_basliq">
                 <span style="float: left;">Sıra: {{ rank }} </span>
                 <span style="margin-left: 5%;"></span>
-                <span style="float: right;">Bal: {{ student.results.total_score }}</span>
+                <span style="float: right;">Topladığı bal: {{ student.results.total_score }}</span>
             </div>
             <div class="vereqe_body">
                 <table class="karne">
@@ -220,7 +220,6 @@
                                     <td><strong>Düz</strong></td>
                                     <td><strong>Səhv</strong></td>
                                     <td><strong>Bal</strong></td>
-                                    <td><strong>Cəm</strong></td>
                                 </tr>
                                 {% for answer in student.answers %}
                                     <tr>
