@@ -34,23 +34,23 @@
     </style>
 </head>
 <body>
-    <h1>Exam Results for {{ exam.exam_name }}</h1>
+    <h1>İmtahan nəticəsi: {{ exam.name }}</h1>
     <table>
         <thead>
             <tr>
-                <th rowspan="2">S/S</th>
-                <th rowspan="2">Student ID</th>
-                <th rowspan="2">Name</th>
+                <th rowspan="2">Sıra</th>
+                <th rowspan="2">İş nömrəsi</th>
+                <th rowspan="2">Adı və Soyadı</th>
                 {% for subject in exam.exam.scoring_rules.scoring_rules %}
                     <th colspan="3">{{ subject.subject_name }}</th>
                 {% endfor %}
-                <th rowspan="2">Total Score</th>
+                <th rowspan="2">Topladığı bal</th>
             </tr>
             <tr>
                 {% for subject in exam.exam.scoring_rules.scoring_rules %}
-                    <th>Right</th>
-                    <th>Wrong</th>
-                    <th>Total</th>
+                    <th>Düz</th>
+                    <th>Səhv</th>
+                    <th>Cəm</th>
                 {% endfor %}
             </tr>
         </thead>
