@@ -29,7 +29,7 @@ def get_student_report(exam, student_id, gender, template_name):
 def report_view(request, gender, template_name):
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
-        exam = get_object_or_404(Exam, id=2)
+        exam = get_object_or_404(Exam, id=1)
         context = get_student_report(exam, student_id, gender, template_name)
         return render(request, template_name, context)
     return render(request, 'exam/input_id.html')
