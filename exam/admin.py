@@ -28,5 +28,5 @@ class ExamAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('student_id', 'first_name', 'last_name', 'father_name', 'class_no', 'total_score')
-    list_filter = ('student_id', 'first_name', 'last_name', 'class_no', 'total_score')
+    list_display = ('student_id', 'first_name', 'last_name', 'father_name', 'gender', 'total_score')
+    list_filter = ('student_id', 'first_name', 'last_name', 'gender', 'total_score')

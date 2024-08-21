@@ -1,0 +1,172 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>İmtahan nəticəsi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .logo-container img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 20px;
+        }
+
+        .icons-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+        }
+
+        .icon {
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .icon img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .icon:hover img {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transform: scale(1.1);
+        }
+
+        .admin-section {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .admin-section h1 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .admin-section h4 {
+            color: #34495e;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .admin-section ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+        }
+
+        .admin-section ul li {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            margin: 5px 0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .admin-section ul li a {
+            font-weight: bold;
+            text-decoration: none;
+            color: #3498db;
+            background-color: transparent;
+            padding: 0;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .admin-section ul li a:hover {
+            color: #2980b9;
+        }
+
+        .admin-section ul li:hover {
+            background-color: #e2e6ea;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-section ul li::before {
+            content: '•';
+            color: #3498db;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo-container">
+        <img src="{% static 'images/logo.png' %}" alt="Logo">
+    </div>
+    <h1>Naxçıvan Dövlət Universitetinin nəzdində İngilis dilli Təmayüllü Gimnaziya <br><br> Nəticələr</h1>
+
+    <div class="icons-container">
+        <a href="{% url 'girl_report' %}" class="icon">
+            <img src="{% static 'images/girl.png' %}" alt="Girl">
+        </a>
+        <a href="{% url 'boy_report' %}" class="icon">
+            <img src="{% static 'images/boy.png' %}" alt="Boy">
+        </a>
+    </div>
+
+    {% if user.is_authenticated %}
+        <div class="admin-section">
+            <h1>Admin Panel</h1>
+            {% for exam in exams %}
+                <h4>{{ exam }}</h4>
+                <p>Siyahı</p>
+                <ul>
+                    <li>Qızlar <a href="{% url 'exam_results_table_girl' exam.id %}">Göstər</a></li>
+                    <li>Oğlanlar <a href="{% url 'exam_results_table_boy' exam.id %}">Göstər</a></li>
+                </ul>
+                <p>Karne</p>
+                <ul>
+                    <li>Qızlar <a href="{% url 'exam_results_report_girl' exam.id %}">Göstər</a></li>
+                    <li>Oğlanlar <a href="{% url 'exam_results_report_boy' exam.id %}">Göstər</a></li>
+                </ul>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>

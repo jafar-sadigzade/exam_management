@@ -19,7 +19,7 @@ class ColumnMapping(models.Model):
     first_name = models.PositiveIntegerField()
     last_name = models.PositiveIntegerField()
     father_name = models.PositiveIntegerField()
-    class_no = models.PositiveIntegerField()
+    gender = models.PositiveIntegerField()
     student_id = models.PositiveIntegerField()
     answers = models.PositiveIntegerField()
 
@@ -46,7 +46,7 @@ class Student(models.Model):
     first_name = models.CharField(max_length=255, verbose_name="Şagirdin adı")
     last_name = models.CharField(max_length=255, verbose_name="Şagirdin soyadı")
     father_name = models.CharField(max_length=255, verbose_name="Şagirdin ata adı")
-    class_no = models.CharField(max_length=2, default=0, verbose_name="Oxuduğu sinif")
+    gender = models.CharField(max_length=5, default="K", choices=(('K', 'Kişi'), ('Q', 'Qadın')), verbose_name="Cins")
     total_score = models.FloatField(default=0, verbose_name="Ümumi bal")
     student_id = models.CharField(max_length=255, unique=True, verbose_name="İş nömrəsi")
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)

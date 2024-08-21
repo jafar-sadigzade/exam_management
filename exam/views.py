@@ -1,40 +1,71 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404
 
 from .models import Exam, Student
 
 
-def exam_request(request):
+def index(request):
     exams = Exam.objects.all()
+    return render(request, 'exam/index.html', {'exams': exams})
+
+
+def get_student_report(exam, student_id, gender, template_name):
+    img = f'/static/images/omr_sheet{student_id}.png'
+
+    try:
+        students_ordered = Student.objects.filter(exam=exam, gender=gender).order_by('-total_score')
+        student = students_ordered.get(student_id=student_id)
+        student_index = list(students_ordered).index(student) + 1
+        return {
+            'student': student,
+            'rank': student_index,
+            'img': img
+        }
+    except Student.DoesNotExist:
+        return {'error': 'İş nömrəsi tapılmadı! '}
+    except Exam.DoesNotExist:
+        return {'error': 'İmtahan tapılmadı! '}
+
+
+def report_view(request, gender, template_name):
     if request.method == 'POST':
         student_id = request.POST.get('student_id')
-        img = '/static/images/' + student_id + '.png'
-
-        try:
-            exam = Exam.objects.get(id=2)
-            students_ordered = Student.objects.filter(exam=exam).order_by('-total_score')
-            student = students_ordered.get(student_id=student_id)
-            student_index = list(students_ordered).index(student) + 1
-            context = {'student': student, 'rank': student_index, 'img': img}
-            return render(request, 'exam/exam_results_report_student.html', context)
-        except (Student.DoesNotExist, Exam.DoesNotExist):
-            context = {'error': 'İş nömrəsi tapılmadı! '}
-            return render(request, 'exam/exam_results_report_student.html', context)
-    return render(request, 'exam/exam_list.html', {'exams': exams})
+        exam = get_object_or_404(Exam, id=2)
+        context = get_student_report(exam, student_id, gender, template_name)
+        return render(request, template_name, context)
+    return render(request, 'exam/input_id.html')
 
 
-def exam_results_table(request, exam_id):
-    try:
-        exam = Exam.objects.get(id=exam_id)
-        students = Student.objects.filter(exam=exam)
-    except Exam.DoesNotExist:
-        return redirect('exam_request')  # Redirect if exam is not found
-    return render(request, 'exam/exam_results_table.html', {'exam': exam, 'students': students})
+def boy_report(request):
+    return report_view(request, 'K', 'exam/exam_results_report_student.html')
 
 
-def exam_results_report(request, exam_id):
-    try:
-        exam = Exam.objects.get(id=exam_id)
-        students = Student.objects.filter(exam=exam)
-    except Exam.DoesNotExist:
-        return redirect('exam_request')  # Redirect if exam is not found
-    return render(request, 'exam/exam_results_report.html', {'exam': exam, 'students': students})
+def girl_report(request):
+    return report_view(request, 'Q', 'exam/exam_results_report_student.html')
+
+
+def exam_results_table(request, exam_id, gender, template_name):
+    exam = get_object_or_404(Exam, id=exam_id)
+    students = Student.objects.filter(exam=exam, gender=gender).order_by('-total_score')
+    return render(request, template_name, {'exam': exam, 'students': students})
+
+
+def exam_results_table_girl(request, exam_id):
+    return exam_results_table(request, exam_id, 'Q', 'exam/exam_results_table.html')
+
+
+def exam_results_table_boy(request, exam_id):
+    return exam_results_table(request, exam_id, 'K', 'exam/exam_results_table.html')
+
+
+def exam_results_report(request, exam_id, gender, template_name):
+    exam = get_object_or_404(Exam, id=exam_id)
+    students = Student.objects.filter(exam=exam, gender=gender).order_by('-total_score')
+    return render(request, template_name, {'exam': exam, 'students': students})
+
+
+def exam_results_report_girl(request, exam_id):
+    return exam_results_report(request, exam_id, 'Q', 'exam/exam_results_report.html')
+
+
+def exam_results_report_boy(request, exam_id):
+    return exam_results_report(request, exam_id, 'K', 'exam/exam_results_report.html')

@@ -39,7 +39,7 @@ def get_column_mapping(exam):
             "first_name": mapping.first_name,
             "last_name": mapping.last_name,
             "father_name": mapping.father_name,
-            "class_no": mapping.class_no,
+            "gender": mapping.gender,
             "student_id": mapping.student_id,
             "answers": mapping.answers
         }
@@ -67,7 +67,7 @@ def process_student_data(file, exam):
                             exam.correct_answers['subjects']}
 
     for row in reader:
-        student_id = row[column_mapping['student_id']].strip()
+        student_id = row[column_mapping['student_id']]
 
         # Ensure unique student ID
         while Student.objects.filter(student_id=student_id, exam=exam).exists():
@@ -93,7 +93,7 @@ def process_student_data(file, exam):
                 "first_name": replace_letters(row[column_mapping['first_name']].strip()),
                 "last_name": replace_letters(row[column_mapping['last_name']].strip()),
                 "father_name": replace_letters(row[column_mapping['father_name']].strip()),
-                "class_no": row[column_mapping['class_no']],
+                "gender": row[column_mapping['gender']],
                 "student_id": student_id,
                 "subjects": subjects_list  # Store answers as a list of dictionaries
             }
@@ -102,7 +102,7 @@ def process_student_data(file, exam):
                 first_name=student_info['first_name'],
                 last_name=student_info['last_name'],
                 father_name=student_info['father_name'],
-                class_no=student_info['class_no'],
+                gender=student_info['gender'],
                 student_id=student_info['student_id'],
                 exam=exam,
                 answers=student_info['subjects']  # Use new format
@@ -159,9 +159,11 @@ def calculate_student_result(student, exam):
             incorrect_count = 0
 
             for sa, ca in zip(student_answers, correct_answers):
-                if sa.strip().upper() == ca.strip().upper() or ca.strip().upper() == '*':
+                if sa == ' ':
+                    pass
+                elif sa.strip().upper() == ca.strip().upper() or ca.strip().upper() == '*':
                     correct_count += 1
-                elif sa.strip() != ' ' and sa.strip().upper() != ca.strip().upper():
+                elif sa.strip().upper() != ca.strip().upper():
                     incorrect_count += 1
 
             # Calculate the total score for the subject
