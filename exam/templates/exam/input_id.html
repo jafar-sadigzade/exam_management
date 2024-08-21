@@ -110,7 +110,7 @@
     <div class="logo-container">
         <img src="{% static 'images/logo.png' %}" alt="Logo">
     </div>
-    <h1>Naxçıvan Dövlət Universitetinin nəzdində İngilis dilli Təmayüllü Gimnaziya</h1>
+    <h1>Naxçıvan Dövlət Universitetinin nəzdində İngilis dilli Təmayüllü Gimnaziya <br><br> Nəticələr</h1>
     <h3>İş nömrənizi daxil edin</h3>
     <form method="post">
         {% csrf_token %}
@@ -123,15 +123,5 @@
         <p class="error">{{ error }}</p>
     {% endif %}
 </div>
-{% if user.is_authenticated %}
-    <div class="container">
-        <h1>Exam List</h1>
-        {% for exam in exams %}
-            <h4>{{ exam }}</h4>
-            <a href="{% url 'exam_results_table' exam.id %}">Siyahı</a>
-            <a href="{% url 'exam_results_report' exam.id %}">Karne</a>
-        {% endfor %}
-    </div>
-{% endif %}
 </body>
 </html>
