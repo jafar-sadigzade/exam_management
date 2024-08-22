@@ -191,10 +191,44 @@
             align-items: center;
         }
 
+        /* Success message styling */
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            text-align: center; /* Center text horizontally */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 50px; /* Ensure there's enough space for centering */
+        }
+
+        /* Danger message styling */
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            text-align: center; /* Center text horizontally */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 50px; /* Ensure there's enough space for centering */
+        }
+
     </style>
 </head>
 
 <body>
+
+<div class="container-fluid" style="padding-top: 10px !important; padding-bottom: 5px !important; display: block !important;">
+    <h4 class="alert {{ tags }} m-2" style="font-size: 25px; font-weight: bold;"> {{ message }} </h4>
+</div>
 
 <div class="container-fluid">
     {% if student %}
@@ -262,7 +296,7 @@
     {% endif %}
 </div>
 <div class="container">
-    <iframe style="width:100%; height:500px;" src="{{ img }}"></iframe>
+    <iframe style="width:100%; height:500px;" src="{{ pdf }}"></iframe>
 </div>
 </body>
 
