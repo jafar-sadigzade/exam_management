@@ -9,7 +9,7 @@ def index(request):
 
 
 def get_student_report(exam, student_id, gender, template_name):
-    img = f'/static/images/omr_sheet{student_id}.png'
+    img = f'/static/pdf/{student_id}.pdf'
 
     try:
         students_ordered = Student.objects.filter(exam=exam, gender=gender).order_by('-total_score')
