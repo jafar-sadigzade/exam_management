@@ -191,6 +191,13 @@
             align-items: center;
         }
 
+        @media (max-width: 768px) {
+            .container-fluid {
+                display: block; /* or inline-block depending on your layout needs */
+                /* You can add additional mobile-specific styles here */
+            }
+        }
+
         /* Success message styling */
         .alert-success {
             color: #155724;
@@ -226,7 +233,8 @@
 
 <body>
 
-<div class="container-fluid" style="padding-top: 10px !important; padding-bottom: 5px !important; display: block !important;">
+<div class="container-fluid"
+     style="padding-top: 10px !important; padding-bottom: 5px !important; display: block !important;">
     <h4 class="alert {{ tags }} m-2" style="font-size: 25px; font-weight: bold;"> {{ message }} </h4>
 </div>
 
