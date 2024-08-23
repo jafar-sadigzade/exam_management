@@ -159,7 +159,7 @@ def calculate_student_result(student, exam):
             incorrect_count = 0
 
             for sa, ca in zip(student_answers, correct_answers):
-                if ca == '*':
+                if sa == ' ' and ca == '*':
                     correct_count += 1
                 if sa == ' ':
                     pass
