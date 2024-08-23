@@ -151,8 +151,8 @@ def calculate_student_result(student, exam):
             student_answers = subject_data['student_answers']
 
             # Ensure correct and student answers are the same length
-            correct_answers = correct_answers.strip()
-            student_answers = student_answers.strip()
+            correct_answers = correct_answers
+            student_answers = student_answers
 
             # Calculate the correct and incorrect answers count
             correct_count = 0
@@ -161,9 +161,9 @@ def calculate_student_result(student, exam):
             for sa, ca in zip(student_answers, correct_answers):
                 if sa == ' ':
                     pass
-                elif sa.strip().upper() == ca.strip().upper() or ca.strip().upper() == '*':
+                elif sa == ca or ca == '*':
                     correct_count += 1
-                elif sa.strip().upper() != ca.strip().upper():
+                elif sa != ca:
                     incorrect_count += 1
 
             # Calculate the total score for the subject
