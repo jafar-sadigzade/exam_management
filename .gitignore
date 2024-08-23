@@ -1,6 +1,5 @@
 .idea/
 venv/
-*.sqlite3
 */migrations/
 **/__pycache__/
 media/
